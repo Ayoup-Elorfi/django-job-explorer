@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text">
+                    <h3>blog</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+
+
+<!--================Blog Area =================-->
+<section class="blog_area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="blog_left_sidebar">
+                    {% for blog in blogs %}
+                    <article class="blog_item">
+                        <div class="blog_item_img">
+                            <img class="card-img rounded-0" src="img/blog/single_blog_1.png" alt="">
+                            <a href="#" class="blog_item_date">
+                                <h3>{{ blog.blog_date|date:" d " }}</h3>
+                                <p>{{ blog.blog_date|date:" M " }}</p>
+                            </a>
+                        </div>
+                        <div class="blog_details">
+                            <a class="d-inline-block" href="{% url 'blog:detail' blog.slug %}">
+                                <h2>{{ blog.title }}</h2>
+                            </a>
+                            <p>{{ blog.content }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                    {% if blogs.has_other_pages %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="pagination_wrap">
+                                <ul>
+                                    {% if blogs.has_previous %}
+                                    <li><a href="?page=1"> <i class="ti-angle-left"></i> </a></li>
+                                    {% endif %}
+
+                                    {% for i in blogs.paginator.page_range %}
+                                    <li><a href="?page={{i}}"><span>{{i}}</span></a></li>
+                                    {% endfor %}
+
+                                    {% if blogs.has_next %}
+                                    <li><a href="?page={{ blogs.next_page_number }}"> <i class="ti-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget search_widget">
+                        <form action="#">
+                            {% bootstrap_form blog_filter.form %}
+                            <input type="submit" class="boxed-btn3 w-100 mt-3" value="Search">
+                        </form>
+                    </aside>
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title">Category</h4>
+                        {% for category in categories %}
+                        <ul class="list cat-list">
+                            <li>
+                                <a href="#" class="d-flex">
+                                    <p>{{ category.name }}</p>
+                                    <p>({{ category.blog_set.count }})</p>
+                                </a>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================Blog Area =================-->
+
+{% endblock content %}
